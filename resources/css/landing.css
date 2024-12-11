@@ -1,0 +1,345 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+:root {
+    --primary-color: rgb(254, 205, 55);
+    --secondary-color: #ffffff;
+    --light-color: #f8f8f8;
+    --white-color: #fff;
+}
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: "Open Sans", sans-serif;
+    font: 16px;
+    list-style: none;
+
+}
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background:linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url(/public/assets/background-image.webp)  no-repeat fixed;
+    background-size: cover;
+
+}
+.nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 90px;
+    background-color: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 0;
+    width: 100%;
+    padding: 0 60px;
+}
+
+h1{
+    font-family: 'League Spartan', arial, helvetica, sans-serif !important;
+    color: var(--primary-color) !important;
+    font-weight: 900 !important;
+    font-size: 2.5rem;
+}
+ h2, h3 {
+    text-align: center;
+    margin: 20px 0;
+}
+.hero-title {
+    font-size: 3rem !important;
+    color: rgb(195, 172, 44);
+    font-family: 'League Spartan', arial, helvetica, sans-serif;
+    font-weight: 200;
+
+}
+
+p {
+    line-height: 1.6;
+}
+
+.btn-contact {
+    display: inline-block;
+    background-color:rgb(254, 205, 55);
+    color: #000000;
+    padding: 20px 42px;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: "Open Sans", sans-serif;
+}
+
+.btn:hover {
+    background-color: rgb(255, 255, 233);
+
+}
+
+.hidden {
+    display: none;
+}
+
+/* Hero Section */
+.hero {
+
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(254, 205, 55);
+    text-align: center;
+}
+
+
+.hero-content .btn {
+    margin-top: 20px;
+}
+
+/* About Section */
+.about {
+    padding: 40px;
+    background: #f4f4f4;
+}
+
+.about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.about-video {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.capital{
+    background-color: rgb(172, 130, 6);
+    height: 100%;
+}
+.about-info {
+    max-width: 90%;
+    margin: auto;
+}
+
+/* Carousel */
+.carousel {
+    background: #fff;
+    padding: 40px;
+}
+.btn-pdf{
+    color: rgb(145, 114, 19) !important;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: "Open Sans", sans-serif;
+}
+.btn-pdf:hover{
+    color: rgb(209, 216, 1) !important;
+}
+
+.carousel{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.carousel-container {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    width: 80%;
+    height: 90vh;
+}
+
+.carousel-item {
+    max-width: 100%;
+    transition: transform 0.5s ease-in-out;
+    display: none;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 90vh;
+    object-fit: cover;
+}
+
+.carousel-item.active {
+    display: block;
+}
+
+.carousel-control {
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.carousel-control.prev {
+    left: 10px;
+}
+.carousel-control:hover {
+    background: rgb(0, 0, 0);
+    width: 30px;
+    height: 60px;
+    border-radius: 10%;
+    transition: all 0.3s ease-in-out;
+}
+.carousel-control.next {
+    right: 10px;
+}
+
+
+/* Contact Section */
+.contact {
+    background:linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, .5)), url(/public/assets/end-page.jpg);
+    backdrop-filter: brightness(0.2);
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    padding: 4rem 0rem;
+}
+
+.contact-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    margin: 0 auto;
+    padding: 4rem 10rem;
+    width: 70%;
+}
+.content-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+.contact-info {
+    gap: 2rem !important;
+}
+
+.work-hours, .contact-form {
+    flex: 1;
+    max-width: 500px;
+    margin: auto;
+}
+
+.contact-form input, .contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.contact-form .btn {
+    width: 100%;
+}
+.text-contact{
+    color: #ffffff !important;
+    font-size: 4rem;
+}
+footer{
+    width: 100%;
+    height: 30vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(0, 0, 0);
+    color: #ffffff;
+}
+.footer-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+}
+.footer-content p{
+    text-align: center;
+    font-weight: 100;
+}
+.tx-contact{
+    color: #000000 !important;
+    font-size: 2rem;
+}
+.btn-contact-2{
+    background-color:rgb(254, 205, 55);
+    color: #000000;
+    padding: 20px 10px !important;
+    border-radius: 5px;
+    width: 200px !important;
+    text-align: center;
+    font-weight: 400;
+    font-size: 12px;
+    font-family: "Open Sans", sans-serif;
+    border: none;
+}
+.correo{
+    color: rgb(145, 114, 19) !important;
+    text-decoration: none;
+} #work-hours-list{
+    text-align: start;
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-content, .contact-content {
+        flex-direction: column;
+    }
+
+    .carousel-container {
+        height: 200px;
+    }
+    .hero-title {
+        font-size: 1.5rem !important;
+        color: rgb(195, 172, 44);
+        font-family: 'League Spartan', arial, helvetica, sans-serif;
+        font-weight: 200;
+    
+    }
+h1{
+    font-size: 1.5rem !important;
+}    
+.nav{
+    height: 50px;
+
+}
+.nav img{
+    height: 30px;
+}
+.btn-contact{
+    display: inline-block;
+    background-color:rgb(254, 205, 55);
+    color: #000000;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: 400;
+    font-size: 12px;
+    font-family: "Open Sans", sans-serif;
+}
+}
+
+

@@ -1,0 +1,27 @@
+
+.table-responsive {
+    position: relative;
+}
+.sticky-col {
+    position: sticky;
+    z-index: 100; 
+    background-color: #ffffff !important;
+}
+
+.first-col {
+    left: 0;
+    z-index: 100; 
+}
+
+.second-col {
+    left: 65px;
+    z-index: 100; 
+}
+.last-col {
+    right: 0;
+    z-index: 20;
+    z-index: 100; 
+}
+input {
+    text-transform: uppercase;
+}
