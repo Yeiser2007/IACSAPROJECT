@@ -18,6 +18,10 @@ class EmployeesController extends Controller
     {
         return view('employees.employees');
     }
+    public function vacations()
+    {
+        return view('employees.vacations');
+    }
     public function update(Request $request, $employee)
     {
         $employee = Employees::findOrFail($employee);

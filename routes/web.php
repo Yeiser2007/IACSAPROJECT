@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\EmployeesController;
+use App\Http\Controllers\FortnightlyIncidents;
 use App\Http\Controllers\IncidencesController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\WeeklyIncidents;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,8 +30,22 @@ Route::middleware([
     Route::get('/empleados/export', [EmployeesController::class, 'exportEmployees'])->name('empleados.export');
     Route::resource('/empleados', EmployeesController::class)->middleware('can:employees.index')->except('create','show')->names('empleados');
     Route::get('/empleados/export-card/{id}', [EmployeesController::class, 'exportPDF'])->name('empleados.exportPDF');
+    Route::get('/vacaciones', [EmployeesController::class, 'vacations'])->name('empleados.vacaciones');
     //incidencias
     Route::resource('/incidencias', IncidencesController::class);
     Route::get('/incidencias/export/{week}', [IncidencesController::class, 'exportIncidences'])->name('incidencias.export');
     
+    //incidencias semanales
+
+    Route::resource('/incidencias-semanales', WeeklyIncidents::class);
+
+
+    //incidencias quincenales
+    Route::resource('/incidencias-quincenales', FortnightlyIncidents::class);
+
+    //vacaciones
+    
+
+
+
 });

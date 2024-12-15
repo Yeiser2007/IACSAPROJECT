@@ -53,17 +53,17 @@
         @if (isset($employeeIncidences['incidences'][$day['nombre']]))
       @foreach ($employeeIncidences['incidences'][$day['nombre']] as $incidence)
       <div class="d-flex flex-column gap-2">
-        @if (!$incidence->exit_time || !$incidence->entry_time)
-          <strong> {{ $incidence->recorded_schedule }} </strong>
-        @else
-        <strong> {{ $incidence->entry_time }}- {{ $incidence->exit_time }}</strong>
-        @endif
-      
+      @if (!$incidence->exit_time || !$incidence->entry_time)
+      <strong> {{ $incidence->recorded_schedule }} </strong>
+    @else
+      <strong> {{ $incidence->entry_time }}- {{ $incidence->exit_time }}</strong>
+    @endif
+
       @if($incidence->overtime_hours > 0 || $incidence->comments != "" || $incidence->reason != "")
       <button type="button"
       wire:click="showExtras('{{$incidence->entry_time}}','{{$incidence->exit_time}}','{{$incidence->recorded_schedule}}','{{$incidence->overtime_hours}}','{{$incidence->comments}}','{{$incidence->reason}}','{{$incidence->abilitation_id}}')"
       class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-      Ver extras</i>
+      <i class="fas fa-eye"></i>
       </button>
     @endif
       </div>
@@ -101,12 +101,12 @@
         <div class="modal-body">
           <span><b>Horario laboral:</b>{{ $entryTime }}-{{ $exitTime }} </span><br>
           @if ($overtimeHours != 0)
-          <span><b>Horario Extra:</b>{{ $exitTime }}-{{ $recordedSchedule }} </span><br>
-          <span><b>Horas extras:</b>{{ $overtimeHours }} </span><br>
-          @else
-          <span><b>Estatus:</b>{{$recordedSchedule}}</span><br>
-          @endif
-          
+        <span><b>Horario Extra:</b>{{ $exitTime }}-{{ $recordedSchedule }} </span><br>
+        <span><b>Horas extras:</b>{{ $overtimeHours }} </span><br>
+      @else
+      <span><b>Estatus:</b>{{$recordedSchedule}}</span><br>
+    @endif
+
           <span><b>Comentarios:</b> {{ $comments }} </span><br>
           <span><b>Motivos</b> {{ $reasons }} </span><br>
           <span><b>Habilitacion</b> {{ $abilitation }} </span><br>
@@ -152,8 +152,7 @@
         <!-- Pie del modal -->
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary" wire:click="generateIncidences()"
-            id="saveDays">
+          <button type="button" class="btn btn-primary" wire:click="generateIncidences()" id="saveDays">
             Guardar
           </button>
         </div>

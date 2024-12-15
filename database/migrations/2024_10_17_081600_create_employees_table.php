@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('payment_type');
             $table->timestamps();
         });
+
     }
 
     /**
