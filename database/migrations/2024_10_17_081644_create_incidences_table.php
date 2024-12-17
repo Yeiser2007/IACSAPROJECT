@@ -22,13 +22,13 @@ return new class extends Migration
             $table->foreignId('employee_id')->constrained('employees');
             $table->date('record_date');
             $table->string('recorded_schedule')->nullable();
-            $table->string('entry_time');
-            $table->string('exit_time');
+            $table->string('entry_time')->nullable();
+            $table->string('exit_time')->nullable();
             $table->decimal('overtime_hours', 5, 2)->nullable();
             $table->decimal('sunday_premium', 8, 2)->nullable();
             $table->foreignId('user_id')->constrained('users');
             $table->string('holiday')->nullable();
-            $table->foreignId('abilitation_id')->constrained('abilitations');
+            $table->foreignId('abilitation_id')->constrained('abilitations')->nullable();
             $table->string('reason')->nullable();
             $table->string('comments')->nullable();
             $table->timestamps();

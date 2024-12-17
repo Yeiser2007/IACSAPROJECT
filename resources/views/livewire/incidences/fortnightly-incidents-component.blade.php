@@ -7,13 +7,23 @@
             <div class="row">
                 <div class="form-group col-4">
                     <p class="h5">Selecciopne la semana:</p>
-                    <select class="form-control" name="week">
+                    <select class="form-control" wire:model.live="weekSelected" name="week">
+                    @foreach ($weeksOfYear as $week )
+                            <option value="{{$week['numero']}}"> Semana {{ $week['numero'] }} ({{ $week['rango'] }})</option>
+                        @endforeach
                     </select>
+                    @foreach ($daysOfWeek as $days )
+                            <option value="{{$days['fecha']}}"> Semana {{ $days['fecha'] }} ({{ $days['nombre'] }})</option>
+                    @endforeach
+                    {{  $startWeekSelected}} {{$endWeekSelected}}
                 </div>
                 <div class="form-group col-4">
                     <p class="h5">Empleado:</p>
                     <select class="form-control" name="employee">
-                        
+                            <option value="" selected disabled > Seleccione un empleado</option>
+                        @foreach ($employees as $employee )
+                            <option value="{{$employee->id}}">{{$employee->name}} {{$employee->first_name}} {{$employee->last_name}}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group col-4">
@@ -53,49 +63,59 @@
     </div>
     <div class="card mt-2">
         <div class="card-header">
-            <h5>Incidencias semanales</h5>
+            <div class="row">
+                <div class="col-8">
+                    <h5>Incidencias semana: {{$weekSelected}}</h5>
+                </div>
+                <div class="col-4">
+                    <button type="button" wire:click="generateIncidences" class="btn btn-warning float-end">
+                        Generar registros
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <table class="table table-striped table-bordered table-hover dataTable dtr-inline table-responsive">
                 <thead>
                     <tr>
                         <th>NOI</th>
-                        <th>No. empleado</th>
+                       
                         <th>Nombre</th>
-                        <th>Categoria</th>
-                        <th>Jornada</th>
-                        <th>Fecha ingreso</th>
-                        <th>Salario diario</th>
-                        <th>Salario diario</th>
-                        <th>Sueldo libre semanal</th>
+                        <th>Puesto</th>
+                        <th>Sueldo bruto mensual</th>
+                        <th>Alta IMMS</th>
+                        <th>Sueldo bruto mensual</th>
+                        <th>Sueldo libre mensual</th>
+                        <th>Pago</th>
                         <th>Dias Trabajados</th>
-                        <th>Bono puntualidad</th>
-                        <th>H. Dobles</th>
-                        <th>H. Triples</th>
-                        <th>Descanso Laborado</th>
-                        <th>Prima dominical</th>
-                        <th>Dias Vacaciones</th>
-                        <th>Prima Vacacional</th>
-                        <th>Habilitacion</th>
-                        <th>Carga inicial</th>
-                        <th>Parcialidad</th>
-                        <th>Plazo</th>
-                        <th>Saldo</th>
                         <th>Infonavit</th>
+                        <th>Festivo Laborado</th>
+                        <th>bono Puntualidad y Asistencia</th>
+                        <th>Prestamo Descontar </th>
+                        <th>Turno</th>
                         <th>Comentarios</th>
+                        <th>Estatus</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>   
+                @foreach($data as $d)
+                <tr>
+                    <td>{{$d['NOI']}}</td>
+                    <td>{{$d['employee_number']}}</td>
+                    <td>{{$d['name']}}</td>
+                    <td>{{$d['categoria']}}</td>
+                    <td>{{$d['jornada']}}</td>
+                    <td>{{$d['hire_date']}}</td>
+                    <td>{{$d['daily_salary']}}</td>
+                    <td>{{$d['total_sunday_premium']}}</td>
+                    <td>{{$d['total_days_registered']}}</td>
+                    <td>{{$d['total_overtime_hours']}}</td>
+                    <td>{{$d['total_overtime_hours']}}</td>
+                </tr>
+            @endforeach
             </table>
         </div>
+        
         <div class="card-footer d-flex justify-content-end">
             <button class="btn btn-warning">Validar registros</button>
         </div>

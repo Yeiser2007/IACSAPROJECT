@@ -131,15 +131,20 @@ class CreateIncidence extends Component
             $registeredEnd = Carbon::parse($this->end_time_register);
 
             $diffInMinutes = $end->diffInMinutes($registeredEnd);
-
-            if ($diffInMinutes > 0 && $diffInMinutes< 24) {
-                $this->overtime_hours = 0;
-            } else if($diffInMinutes> 24 && $diffInMinutes<44) {
-                $this->overtime_hours = 0.5;
-            } else {
-                $this->overtime_hours = (int) floor($diffInMinutes / 60) + 1; // Redondea hacia abajo al número entero más cercano
-          
+            $diffInHours = $end->diffInHours($registeredEnd);
+            $this->overtime_hours = 0;
+            if ($diffInHours > 0) {
+                $this->overtime_hours += $diffInHours;
             }
+            if ($diffInMinutes > 0 && $diffInMinutes< 25) {
+                $this->overtime_hours = 0;
+            } else if($diffInMinutes> 24 && $diffInMinutes<45) {
+                $this->overtime_hours += 0.5;
+            }
+            else if ($diffInMinutes > 44 && $diffInMinutes< 60) {
+                $this->overtime_hours += 1;
+            }
+            
                  
         }
     }

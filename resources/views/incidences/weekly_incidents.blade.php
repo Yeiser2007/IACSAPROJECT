@@ -38,5 +38,17 @@
         });
     </script>
 @endif
+@if(session('error'))
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Por favor verifica los datos',
+                text: '{{ session("error") }}',
+            });
+        });
+    </script>
+@endif
 
 @stop

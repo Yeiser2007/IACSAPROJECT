@@ -11,6 +11,7 @@ class FortnightlyIncidents extends Controller
      */
     public function index()
     {
+        
         return view('incidences.fortnightly_incidents');
     }
 
