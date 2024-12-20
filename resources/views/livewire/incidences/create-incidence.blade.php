@@ -14,7 +14,7 @@
                 <div class="row col-12">
                     <div class="form-group col-md-4 col-xs-12">
                         <label for="semana">Selecciona la semana</label>
-                        <select id="semana" wire:model.live="weekSelected" class="form-control">
+                        <select id="semana" wire:model.live="weekSelected" style="text-transform: uppercase" class="form-control">
                             @foreach($weeksOfYear as $semana)
                                 <option value="{{ $semana['numero'] }}" {{ $semana['numero'] == $currentWeek ? 'selected' : '' }}>
                                     Semana {{ $semana['numero'] }} ({{ $semana['rango'] }})
@@ -25,7 +25,7 @@
                     <div class="form-group col-md-4 col-xs-12 ">
                         <label for="dia">Selecciona el día de la semana</label>
                         <div class="d-flex">
-                            <select id="dia" name="record_date" wire:model.live="daySelected" class="form-control">
+                            <select id="dia" name="record_date" style="text-transform: uppercase" wire:model.live="daySelected" class="form-control">
                                 <option value="">-- Selecciona un día --</option>
                                 @foreach($daysOfWeek as $dia)
                                     <option value="{{ $dia['fecha'] }}">
@@ -41,10 +41,10 @@
                     </div>
                     <div class="form-group col-md-4 col-xs-12">
                         <label for="usuario">Usuarios sin incidencia para {{ $daySelected }}</label>
-                        <select id="usuario" name="employee_id" class="form-control" wire:model.live="userSelected">
+                        <select id="usuario" style="text-transform: uppercase" name="employee_id" class="form-control" wire:model.live="userSelected">
                             <option value="">Seleccione un usuario</option>
                             @forelse($usersWithoutIncidence as $usuario)
-                                <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                                <option value="{{ $usuario->id }}">{{ $usuario->name }} {{ $usuario->last_name }} {{ $usuario->first_name }}</option>
                             @empty
                                 <option value="">No hay usuarios sin incidencia para esta fecha</option>
                             @endforelse
@@ -76,6 +76,7 @@
                         <label for="extras">Horas Extras (h)</label>
                         <input type="number" name="overtime_hours" class="form-control" wire:model.live="overtime_hours"
                             readonly value=" {{ number_format($overtime_hours, 2) }}" id="extras" />
+                            {{ $hours }} -{{$minuts  }}
                     </div>
                     <div class="form-group col-md-2 col-xs-12">
                         <label for="extras">¿Es festivo o no laboral? </label>
@@ -107,7 +108,7 @@
                     </div>
                     <div class="form-group col-md-4 col-xs-12">
                         <label for="abilitation">Habilitacion</label>
-                        <select class="form-select" name="abilitation_id" wire:model="abilitation_id">
+                        <select class="form-select" style="text-transform: uppercase" name="abilitation_id" wire:model="abilitation_id">
                             <option value="">-- Selecciona una opción --</option>
                             @foreach($abilitations as $abilit)
                                 <option value="{{ $abilit->id }}">{{ $abilit->name }}</option>

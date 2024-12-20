@@ -111,7 +111,7 @@ class IncidencesController extends Controller
     $this->daysOfWeek($week);
 
     $registros = Incidences::whereIn('record_date', array_column($this->daysOfWeek, 'fecha'))
-        ->with('employees:id,name')
+        ->with('employees:id,name,first_name,last_name,daily_salary')
         ->get();
 
     return $registros->groupBy('employee_id')->map(function ($registrosUsuario) {
@@ -121,6 +121,8 @@ class IncidencesController extends Controller
             'employees' => [
                 'id' => $employee->id,
                 'name' => $employee->name,
+                'first_name' => $employee->first_name,
+                'last_name' => $employee->last_name,
             ],
             'totalHours' => $registrosUsuario->sum('overtime_hours'),
             'sundayPremium' => $registrosUsuario->where('sunday_premium', 1)->count(),

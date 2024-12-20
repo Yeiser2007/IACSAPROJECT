@@ -28,4 +28,8 @@ class Incidences extends Model
     {
         return $this->belongsTo(Employees::class, 'employee_id');
     }
+    public function abilitations()
+    {
+        return $this->belongsTo(Abilitations::class, 'abilitation_id');
+    }
 }

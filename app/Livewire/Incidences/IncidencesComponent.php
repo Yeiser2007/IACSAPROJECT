@@ -3,6 +3,7 @@
 namespace App\Livewire\Incidences;
 
 
+use App\Models\abilitations;
 use App\Models\Employees;
 use App\Models\Incidences;
 use Livewire\Attributes\On;
@@ -22,7 +23,6 @@ class IncidencesComponent extends Component
     protected $paginationTheme = 'bootstrap';
     public $sort = 'id';
     public $direction = 'asc';
-
     public $comments;
     public $reasons;
     public $overtimeHours;
@@ -70,7 +70,11 @@ class IncidencesComponent extends Component
     {
         Carbon::setLocale('es');
         $numberOfWeek = intval($week);
-        $startWeek = Carbon::now()->startOfYear()->addWeeks($numberOfWeek)->startOfWeek(4);
+        if ($numberOfWeek == 0) {
+            $startWeek = Carbon::now()->subYear()->endOfYear()->startOfWeek(4);
+        } else {
+            $startWeek = Carbon::now()->startOfYear()->addWeeks($numberOfWeek)->startOfWeek(4);
+        }
         $endWeek = $startWeek->copy()->addDays(6);
         $this->daysOfWeek = [];
         for ($date = $startWeek->copy(); $date->lte($endWeek); $date->addDay()) {
@@ -80,9 +84,10 @@ class IncidencesComponent extends Component
             ];
         }
     }
+    
     public function render()
     {
-        if (empty($this->weekSelected)) {
+        if ($this->weekSelected == null) {
             return view('livewire.incidences.incidences-component', [
                 'incidencesByEmployee' => []
             ]);
@@ -91,7 +96,8 @@ class IncidencesComponent extends Component
         $this->daysOfWeek($this->weekSelected);
 
         $registros = Incidences::whereIn('record_date', array_column($this->daysOfWeek, 'fecha'))
-            ->with('employees:id,name')
+            ->with('employees:id,name,first_name,last_name')
+            ->with('abilitations:id,name,salary')
             ->whereHas('employees', function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
@@ -103,6 +109,8 @@ class IncidencesComponent extends Component
                 'employees' => [
                     'id' => $employee->id,
                     'name' => $employee->name,
+                    'first_name' => $employee->first_name,
+                    'last_name' => $employee->last_name
                 ],
                 'totalHours' => $registrosUsuario->sum('overtime_hours'),
                 'sundayPremium' => $registrosUsuario->where('sunday_premium', 1)->count(),
@@ -111,16 +119,20 @@ class IncidencesComponent extends Component
                     return Carbon::parse($registro->record_date)->locale('es')->dayName;
 
                 }),
+                
             ];
         });
+        // dd($incidencesByEmployee);
         return view('livewire.incidences.incidences-component', compact('incidencesByEmployee'));
     }
-    public function showExtras($entryTime, $exit_time, $recorded_schedule, $hours, $comments, $reasons, $abilitation_id)
+    public function showExtras($id,$entryTime, $exit_time, $recorded_schedule, $hours, $comments, $reasons, $abilitation_id)
     {
+        $employeeSalary = Employees::find($id);
         $this->overtimeHours = $hours;
         $this->comments = $comments;
         $this->reasons = $reasons;
-        $this->abilitation = $abilitation_id;
+        $abilitation_id = abilitations::find($abilitation_id);
+        $this->abilitation = $abilitation_id->salary - $employeeSalary->daily_salary;
         $this->exitTime = $exit_time;
         $this->recordedSchedule = $recorded_schedule;
         $this->entryTime = $entryTime;
@@ -149,7 +161,7 @@ class IncidencesComponent extends Component
                     $isHoliday = $selectedDays->contains($day['nombre']);
     
                     if ($isSunday || $isHoliday) {
-                        $recordedSchedule = $isHoliday ? 'Festivo' : 'Descanzo';
+                        $recordedSchedule = $isHoliday ? 'Festivo' : 'Descanso';
                         $entryTime = null;
                         $exitTime = null;
                     } else {

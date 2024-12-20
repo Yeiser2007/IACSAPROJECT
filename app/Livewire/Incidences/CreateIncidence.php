@@ -24,6 +24,7 @@ class CreateIncidence extends Component
     public $weeksOfYear = [];
     public $usersWithoutIncidence = [];
     public $weekSelected;
+    public $hours= 0,$minuts = 0;
     public $reason;
     public $comments;
     public $userSelected;
@@ -55,9 +56,10 @@ class CreateIncidence extends Component
         $currentDate = Carbon::now();
 
         $this->currentWeek = $currentDate->weekOfYear;
+        $lastWednesdayPrevYear = Carbon::now()->subYear()->endOfYear()->startOfWeek(4);
 
-        for ($week = 1; $week <= $this->currentWeek; $week++) {
-            $startWeek = Carbon::now()->startOfYear()->addWeeks($week)->startOfWeek(4);
+        for ($week = 0; $week <= $this->currentWeek; $week++) {
+            $startWeek = $lastWednesdayPrevYear->copy()->addWeeks($week);
             $endWeek = $startWeek->copy()->addDays(6);
             $this->weeksOfYear[] = [
                 'numero' => $week,
@@ -71,8 +73,8 @@ class CreateIncidence extends Component
     {
         Carbon::setLocale('es');
         $numberOfWeek = intval($week);
-
-        $startWeek = Carbon::now()->startOfYear()->addWeeks($numberOfWeek)->startOfWeek(4);
+        $lastWednesdayPrevYear = Carbon::now()->subYear()->endOfYear()->startOfWeek(4);
+        $startWeek = $lastWednesdayPrevYear->copy()->addWeeks($numberOfWeek);
         $endWeek = $startWeek->copy()->addDays(6);
 
         $this->daysOfWeek = [];
@@ -106,6 +108,7 @@ class CreateIncidence extends Component
     }
     public function updatedEndTime()
     {
+
         $this->updateOvertime();
     }
     public function updatedEndTimeRegister()
@@ -126,28 +129,34 @@ class CreateIncidence extends Component
     }
     public function updateOvertime()
     {
+        $this->overtime_hours = 0;
+        $this->hours = 0;
+        $this->minuts = 0;
         if ($this->end_time && $this->end_time_register) {
             $end = Carbon::parse($this->end_time);
             $registeredEnd = Carbon::parse($this->end_time_register);
-
-            $diffInMinutes = $end->diffInMinutes($registeredEnd);
-            $diffInHours = $end->diffInHours($registeredEnd);
-            $this->overtime_hours = 0;
+            $endMinute = $end->minute;
+            $registeredEndMinute = $registeredEnd->minute;
+            $endHour = $end->hour;
+            $registeredEndHour = $registeredEnd->hour;
+            $diffInMinutes =abs($endMinute - $registeredEndMinute);
+            $diffInHours = abs($endHour - $registeredEndHour);
+            if ($diffInMinutes > 0 && $diffInMinutes < 25) {
+                $this->minuts = 0; 
+            } else if ($diffInMinutes >= 25 && $diffInMinutes < 45) {
+                $this->minuts = 0.5; 
+            } else if ($diffInMinutes >= 45 && $diffInMinutes < 60) {
+                $this->minuts = 1; 
+            }
             if ($diffInHours > 0) {
-                $this->overtime_hours += $diffInHours;
+                $this->hours = $diffInHours;
+            } else {
+                $this->hours = 0; 
             }
-            if ($diffInMinutes > 0 && $diffInMinutes< 25) {
-                $this->overtime_hours = 0;
-            } else if($diffInMinutes> 24 && $diffInMinutes<45) {
-                $this->overtime_hours += 0.5;
-            }
-            else if ($diffInMinutes > 44 && $diffInMinutes< 60) {
-                $this->overtime_hours += 1;
-            }
-            
-                 
+            $this->overtime_hours = $this->hours + $this->minuts;
         }
     }
+    
     public function render()
     {
 

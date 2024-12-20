@@ -2,6 +2,8 @@
 
 namespace App\Exports;
 
+use App\Models\abilitations;
+use App\Models\Employees;
 use App\Models\Incidences;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -44,7 +46,7 @@ class IncidencesExport implements FromCollection, WithHeadings, ShouldAutoSize, 
 
             foreach ($employeeIncidences['incidences'] as $dayName => $dayIncidences) {
                 $row = [
-                    'Empleado' => $employeeIncidences['employees']['name'],
+                    'Empleado' => strtoupper($employeeIncidences['employees']['name'] . ' ' . $employeeIncidences['employees']['first_name'] . ' ' . $employeeIncidences['employees']['last_name']),
                     'Fecha' => ucfirst($dayName),
                     'Horario' => $dayIncidences->map(function ($incidence) {
                         return "{$incidence->entry_time} - {$incidence->exit_time}";
@@ -71,7 +73,15 @@ class IncidencesExport implements FromCollection, WithHeadings, ShouldAutoSize, 
                     'Descanso o Festivo laborado' => $holiday,
                     'Prima Dominical' => $sundayPremium,
                     'Habilitacion' => $dayIncidences->map(function ($incidence) {
-                        return $incidence->abilitation_id;
+                        if (!$incidence->abilitation_id) {
+                            return "";
+                        }else{
+                            $employeeSalary = Employees::find($incidence->employee_id);
+                            $abilitation_id = abilitations::find($incidence->abilitation_id);
+                            $abilitation = $abilitation_id->salary - $employeeSalary->daily_salary;
+                            return $abilitation;
+                        }
+                        
                     })->implode(', '),
                     'Comentarios' => $dayIncidences->map(function ($incidence) {
                         return $incidence->comments;

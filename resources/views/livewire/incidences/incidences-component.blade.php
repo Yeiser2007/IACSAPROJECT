@@ -30,6 +30,9 @@
         </div>
       </div>
     </div>
+    @foreach ($daysOfWeek as $day)
+    <span class="text-nowrap"> {{ $day['nombre'] }}-{{ $day['fecha'] }} </span>
+  @endforeach
     <div class="row col-12" style="overflow-x: auto; white-space: nowrap;">
       <table class="table table-striped table-bordered table-hover dataTable dtr-inline table-responsiv">
         <thead>
@@ -47,7 +50,9 @@
           {{ $weekSelect }}
           @foreach ($incidencesByEmployee as $employeeIncidences)
         <tr>
-        <td class="text-nowrap sticky-col first-col">{{ $employeeIncidences['employees']['name'] }}</td>
+        <td class="text-nowrap sticky-col first-col">{{ $employeeIncidences['employees']['name'] }}
+          {{ $employeeIncidences['employees']['first_name'] }} {{ $employeeIncidences['employees']['last_name'] }}
+        </td>
         @foreach ($daysOfWeek as $day)
       <td class="text-nowrap">
         @if (isset($employeeIncidences['incidences'][$day['nombre']]))
@@ -59,9 +64,9 @@
       <strong> {{ $incidence->entry_time }}- {{ $incidence->exit_time }}</strong>
     @endif
 
-      @if($incidence->overtime_hours > 0 || $incidence->comments != "" || $incidence->reason != "")
+      @if($incidence->overtime_hours > 0 || $incidence->comments != "" || $incidence->reason != "" || $incidence->abilitation_id != "")
       <button type="button"
-      wire:click="showExtras('{{$incidence->entry_time}}','{{$incidence->exit_time}}','{{$incidence->recorded_schedule}}','{{$incidence->overtime_hours}}','{{$incidence->comments}}','{{$incidence->reason}}','{{$incidence->abilitation_id}}')"
+      wire:click="showExtras('{{ $incidence->employee_id }}','{{$incidence->entry_time}}','{{$incidence->exit_time}}','{{$incidence->recorded_schedule}}','{{$incidence->overtime_hours}}','{{$incidence->comments}}','{{$incidence->reason}}','{{$incidence->abilitation_id}}')"
       class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
       <i class="fas fa-eye"></i>
       </button>

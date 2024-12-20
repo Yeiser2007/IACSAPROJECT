@@ -22,6 +22,12 @@
     z-index: 20;
     z-index: 100; 
 }
+label{
+    text-transform: uppercase;
+}
 input {
     text-transform: uppercase;
+}
+table th, table td {
+ text-transform: uppercase;
 }
