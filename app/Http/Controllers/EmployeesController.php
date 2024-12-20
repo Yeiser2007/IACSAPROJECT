@@ -108,4 +108,8 @@ class EmployeesController extends Controller
     {
         return Excel::download(new MultiSheetExport, 'CATALOGO DE EMPLEADOS IACSA.xlsx');
     }
+    public function addVacation($id){
+
+        return view('employees.create-vacation' , compact('id'));
+    }
 }

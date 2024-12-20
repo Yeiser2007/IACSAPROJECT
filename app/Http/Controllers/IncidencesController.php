@@ -140,4 +140,6 @@ class IncidencesController extends Controller
         // return $incidencesByEmployee;
         return Excel::download(new IncidencesExport($incidencesByEmployee,$week,$this->month,$this->year,$this->dayStart,$this->dayEnd), '4.-REPORTE SEMANAL  INCIDENCIAS  IACSA NO. '.$week.'.xlsx');
     }
+
+
 }

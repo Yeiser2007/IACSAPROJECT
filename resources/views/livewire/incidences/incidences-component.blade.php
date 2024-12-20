@@ -30,9 +30,7 @@
         </div>
       </div>
     </div>
-    @foreach ($daysOfWeek as $day)
-    <span class="text-nowrap"> {{ $day['nombre'] }}-{{ $day['fecha'] }} </span>
-  @endforeach
+   
     <div class="row col-12" style="overflow-x: auto; white-space: nowrap;">
       <table class="table table-striped table-bordered table-hover dataTable dtr-inline table-responsiv">
         <thead>

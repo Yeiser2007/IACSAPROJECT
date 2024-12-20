@@ -31,6 +31,8 @@ Route::middleware([
     Route::resource('/empleados', EmployeesController::class)->middleware('can:employees.index')->except('create','show')->names('empleados');
     Route::get('/empleados/export-card/{id}', [EmployeesController::class, 'exportPDF'])->name('empleados.exportPDF');
     Route::get('/vacaciones', [EmployeesController::class, 'vacations'])->name('empleados.vacaciones');
+    // Route::get('/vacaciones/agregar', [EmployeesController::class, 'addVacation'])->name('empleados.vacaciones-agregar');
+    Route::get('/vacations/agregar/{employee_id}', [EmployeesController::class, 'addVacation'])->name('vacations.create');
     //incidencias
     Route::resource('/incidencias', IncidencesController::class);
     Route::get('/incidencias/export/{week}', [IncidencesController::class, 'exportIncidences'])->name('incidencias.export');

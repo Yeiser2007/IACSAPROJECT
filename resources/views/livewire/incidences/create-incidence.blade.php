@@ -76,7 +76,6 @@
                         <label for="extras">Horas Extras (h)</label>
                         <input type="number" name="overtime_hours" class="form-control" wire:model.live="overtime_hours"
                             readonly value=" {{ number_format($overtime_hours, 2) }}" id="extras" />
-                            {{ $hours }} -{{$minuts  }}
                     </div>
                     <div class="form-group col-md-2 col-xs-12">
                         <label for="extras">¿Es festivo o no laboral? </label>

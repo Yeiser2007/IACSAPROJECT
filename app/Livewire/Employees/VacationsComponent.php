@@ -10,8 +10,8 @@ use Carbon\Carbon;
 
 class VacationsComponent extends Component
 {
+    use WithPagination;
     public $search;
-
     public $endDate, $startDate, $comments, $employeeId,$messageDays,$daysOfVacation;
     public $sort = 'id';
     public $direction = 'desc';
@@ -19,94 +19,38 @@ class VacationsComponent extends Component
 
     public function mount()
     {
-        
-        $this->updatedEmployeeId();
-        $this->calculateRemainingDays();
+
     }
 
     public function render()
     {
+        // Obtener todos los empleados
         $employees = Employees::all();
-       //traer las vacaciones con la relacion de empleados
+    
+        // Obtener las vacaciones de los empleados, filtradas por el nombre del empleado
         $vacations = Vacations::whereHas('employee', function ($query) {
             $query->where('name', 'like', '%' . $this->search . '%')
                 ->orWhere('last_name', 'like', '%' . $this->search . '%')
                 ->orWhere('first_name', 'like', '%' . $this->search . '%');
         })
-        ->with('employee')->orderBy($this->sort, $this->direction)->paginate(10);
-        return view('livewire.employees.vacations-component', compact('employees','vacations'));
-    }
+        ->with('employee') // Incluir los datos del empleado relacionado
+        ->orderBy($this->sort, $this->direction) // Ordenar según el criterio proporcionado
+        ->paginate(10); // Paginación para mostrar 10 elementos por página
 
-    public function updatedEndDate()
-    {
-        $this->calculateRemainingDays();
+        $vacationsGrouped = $vacations->groupBy('employee_id')->map(function ($vacationGroup) {
+            return $vacationGroup->first();
+        });
+    
+        return view('livewire.employees.vacations-component', compact('employees', 'vacationsGrouped'));
     }
-
-    public function updatedStartDate()
-    {
-        $this->endDate = $this->startDate;
-        $this->calculateRemainingDays();
+    
+    public function addVacation(){
+        return route('empleados.vacaciones-agregar');
     }
-
-    public function updatedEmployeeId()
+    public function redirectToVacationForm($employeeId)
     {
-        $vacation = Vacations::where('employee_id', $this->employeeId)->latest()->first();
-        if ($vacation) {
-            $this->daysOfVacation = $vacation->days; 
-            $this->remainingDays = $vacation->remaining_days;
-        } else {
-            $this->daysOfVacation = 0;
-        }
+        $this->dispatch('create-vacation', id: $employeeId);
+        return redirect()->route('vacations.create', ['employee_id' => $employeeId]);
     }
-    private function calculateRemainingDays()
-    {
-        if ($this->startDate && $this->endDate ) {
-            try {
-                $start = Carbon::parse($this->startDate);
-                $end = Carbon::parse($this->endDate);
-                $diff = $start->diffInDays($end);
-                if ($this->daysOfVacation < 0) {
-                    $this->messageDays = "la fecha de inicio debe ser menor a la fecha de fin";
-                    return;
-                }
-                elseif ( $start == $end ) {
-                    $this->daysOfVacation = $this->daysOfVacation - 1;
-                    $this->remainingDays = $this->remainingDays + 1;
-                }else{
-                    $this->remainingDays = $this->remainingDays + $diff;
-                    $this->daysOfVacation = $this->daysOfVacation - $diff;
-                }    
-                if ($this->daysOfVacation < 0) {;
-                    $this->messageDays = "El empleado seleccionado ha agotado sus días de vacaciones  ";
-                    session()->flash('error', 'El empleado seleccionado ha agotado sus días de vacaciones  ');
-                    return redirect()->route('empleados.vacaciones');
-                }else{
-                    $this->messageDays = null;
-                }
-            } catch (\Exception $e) {
-                $this->remainingDays = 0;
-            }
-        }
-    }
-    public function saveVacation()
-    {
-        $this->validate([
-            'employeeId' => 'required',
-            'comments' => 'required',
-            'startDate' => 'required',
-            'endDate' => 'required',
-            'daysOfVacation' => 'required|numeric|min:0|max:' . $this->daysOfVacation
-        ]);
-            
-            $vacation = new Vacations();
-            $vacation->employee_id = $this->employeeId;
-            $vacation->start_date = $this->startDate;
-            $vacation->end_date = $this->endDate;
-            $vacation->remaining_days = $this->remainingDays;
-            $vacation->days = $this->daysOfVacation;
-            $vacation->comments = $this->comments;
-            $vacation->save();
-            session()->flash('success', 'La solicitud de vacaciones se registro correctamente.');
-            return redirect()->route('empleados.vacaciones');
-    }
+    
 }
