@@ -3,7 +3,7 @@
 
 
         <div class="card-header bg-white">
-            Registrar de incidencias <b><span wire:model>Semana: {{$weekSelected}}</span></b>
+            Registrar de incidencias <b><span wire:model>Semana: {{$weekSelected +1}}</span></b>
         </div>
         <form method="post"
             action="{{ route('incidencias.update', $userSelected ? $userSelected->id ?? $userSelected : '') }}">
@@ -17,7 +17,7 @@
                         <select id="semana" wire:model.live="weekSelected" style="text-transform: uppercase" class="form-control">
                             @foreach($weeksOfYear as $semana)
                                 <option value="{{ $semana['numero'] }}" {{ $semana['numero'] == $currentWeek ? 'selected' : '' }}>
-                                    Semana {{ $semana['numero'] }} ({{ $semana['rango'] }})
+                                    Semana {{ $semana['numero']+1 }} ({{ $semana['rango'] }})
                                 </option>
                             @endforeach
                         </select>
@@ -107,12 +107,18 @@
                     </div>
                     <div class="form-group col-md-4 col-xs-12">
                         <label for="abilitation">Habilitacion</label>
+                        <div class="d-flex">
                         <select class="form-select" style="text-transform: uppercase" name="abilitation_id" wire:model="abilitation_id">
                             <option value="">-- Selecciona una opción --</option>
                             @foreach($abilitations as $abilit)
                                 <option value="{{ $abilit->id }}">{{ $abilit->name }}</option>
                             @endforeach
                         </select>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i>
+</button>
+                        </div>
+                       
+                        
 
                     </div>
                 </div>
@@ -126,4 +132,30 @@
 
         </form>
     </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar abilitacion</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ route('abilitaciones.store') }}" method="POST">
+          @csrf
+          <div class="form-group">
+            <label for="name">Nombre</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="description">Saliario</label>
+            <input class="form-control" id="description" name="salary" required></input>
+          </div>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 </div>

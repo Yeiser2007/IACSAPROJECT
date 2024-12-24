@@ -3,7 +3,7 @@
 namespace App\Livewire\Incidences;
 
 
-use App\Models\abilitations;
+use App\Models\Abilitations;
 use App\Models\Employees;
 use App\Models\Incidences;
 use Livewire\Attributes\On;
@@ -53,7 +53,7 @@ class IncidencesComponent extends Component
     {
         $currentDate = Carbon::now();
 
-        $this->currentWeek = $currentDate->weekOfYear;
+        $this->currentWeek = $currentDate->weekOfYear-1;
 
         for ($week = 1; $week <= $this->currentWeek; $week++) {
             $startWeek = Carbon::now()->startOfYear()->addWeeks($week)->startOfWeek(4);
@@ -131,7 +131,7 @@ class IncidencesComponent extends Component
         $this->overtimeHours = $hours;
         $this->comments = $comments;
         $this->reasons = $reasons;
-        $abilitation_id = abilitations::find($abilitation_id);
+        $abilitation_id = Abilitations::find($abilitation_id);
         $this->abilitation = $abilitation_id->salary - $employeeSalary->daily_salary;
         $this->exitTime = $exit_time;
         $this->recordedSchedule = $recorded_schedule;

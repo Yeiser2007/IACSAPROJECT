@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('vacation_id')->constrained('vacations');
             $table->string('double_hours');
             $table->string('triple_hours');
+            $table->string('holiday_worked');
+            $table->string('abilitation');
             $table->string('sunday_premium');
             $table->string('vacation_bonus');
             $table->integer('days_worked');
@@ -28,7 +30,8 @@ return new class extends Migration
             $table->float('fair_bonus_vacation');
             $table->float('punctuality_bonus');
             $table->string('turn');
-            $table->date('comments');
+            $table->string('status');
+            $table->date('comments')->nullable();
             $table->timestamps();
         });
     }

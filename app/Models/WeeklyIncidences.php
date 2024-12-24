@@ -20,11 +20,13 @@ class WeeklyIncidences extends Model
         'loan_lapse',
         'loan_charge_initial',
         'days_worked',
+        'holiday_worked',
+        'abilitation',
         'balance',
         'vacation_bonus',
-        'fair_bonus_vacation',
+        'bonus',
         'punctuality_bonus',
-        'vacation_id',
+        'vacation_days',
         'fair_bonus',
         'turn',
         'comments',
@@ -34,4 +36,8 @@ class WeeklyIncidences extends Model
     {
         return $this->belongsTo(Employees::class, 'employee_id', 'id');
     }
+    public function vacation()
+    {
+        return $this->belongsTo(Vacations::class, 'vacation_id', 'id');
+    }   
 }

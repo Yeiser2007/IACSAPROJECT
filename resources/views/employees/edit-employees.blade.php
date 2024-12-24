@@ -78,6 +78,11 @@
             </div>
 
             <div class="row">
+            <div class="form-group col-3">
+                    <p class="h5">Fecha de alta IMMS:</p>
+                    <input type="date" class="form-control" name="imms_date"
+                        value="{{ $employee->imms_date }}">
+                </div>
                 <div class="form-group col-3">
                     <p class="h5">Fecha de contratación:</p>
                     <input type="date" class="form-control" readonly name="hire_date" value="{{ $employee->hire_date }}">
@@ -88,7 +93,7 @@
                         value="{{ $employee->seniority_days }}">
                 </div>
                 <div class="form-group col-3">
-                    <p class="h5">Fecha de terminación:</p>
+                    <p class="h5">Fecha de baja:</p>
                     <input type="date" class="form-control" name="termination_date"
                         value="{{ $employee->termination_date }}">
                 </div>

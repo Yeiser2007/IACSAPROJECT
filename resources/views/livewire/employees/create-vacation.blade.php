@@ -1,22 +1,31 @@
 <div>
+    @if ($days == 0)
 
-        <div class="row col-12 mt-5">
-            <div class="col-6">
-                <div class="card">
+        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+  <strong>¡HEY!</strong>Este empleado no tiene dias de vacaciones
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+    @endif
+
+
+    <div class="row col-12 mt-2">
+        <div class="col-4">
+            <div class="card" style="height: 85vh;">
                 <div class="card-header">
                     <h5>Registrar vacaciones</h5>
-                    {{ $id }}
                 </div>
+                <form wire:submit.prevent="saveVacation">
                 <div class="card-body">
-                    <form wire:submit.prevent="saveVacation">
+                   
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group col-12">
+                                    <p class="h4">Id</p>
+                                    <input type="number" class="form-control" wire:model="employeeId" readonly>
+                                </div>
+                                <div class="form-group col-12">
                                     <p class="h5">Empleado:</p>
-                                   <input type="text" class="form-control" wire:model.live="employeeName" readonly>
-                                    @error('employeeId')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <input type="text" class="form-control" wire:model.live="employeeName" readonly>
                                 </div>
                                 <div class="form-group col-12">
                                     <p class="h5">Fecha de ausencia:</p>
@@ -27,28 +36,29 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-12">
-                                    <p class="h5">Fecha de regreso:</p>
-                                    <input type="date" class="form-control" wire:model.live="endDate">
-                                    @error('endDate')
+                                    <p class="h5">Días tomados</p>
+                                    <input type="number " class="form-control" wire:model.live="daysTaken">
+                                    @error('daysTaken')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group col-12">
-                                    <p class="h5">Dias restantes</p>
-                                    <input type="text" class="form-control" wire:model.live="daysOfVacation">
-                                    {{ $messageDays }}
+
+                                <div class=" form-group col-12 ">
+                                        <p class="h5" for="vacation">Días restantes:</p>
+                                        <input type="text" class="form-control" wire:model.live="days" readonly>
+                                    
+                                    @error('days')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
+
                                 <div class="form-group col-12">
                                     <p class="h5">Comentarios:</p>
                                     <input type="text" class="form-control" wire:model.live="comments" name="comments">
                                     @error('comments')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
-                                    {{ $comments }}
                                 </div>
-                            </div>
-                            <div class="col-6">
-
                             </div>
 
                         </div>
@@ -57,93 +67,45 @@
                     <button class="btn btn-primary" type="submit">Registrar</button>
                 </div>
                 </form>
-                </div>
             </div>
-            <div class="col-6">
-                <div class="card">
+        </div>
+        <div class="col-8">
+            <div class="card" style="height: 85vh;">
                 <div class="card-header">
-                    <h5>calculo acorde a (LFT 2023- Ley federal del trabajo)</h5>
+                    <h5>Registro de vacaciones tomadas</h5>
                 </div>
                 <div class="card-body">
                     <div class="row col-12">
-                    <div class="col-6">
-                    <table class="table table-striped table-bordered table-hover dataTable dtr-inline table-responsiv">
-                        <thead>
-                            <tr>
-                                <th>Año</th>
-                                <th>Días de vacaciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>12</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>14</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>16</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>18</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>20</td>
-                            </tr>
-                            <tr>
-                                <td>6-10</td>
-                                <td>22</td>
-                            </tr>
-                            <tr>
-                                <td>11-15</td>
-                                <td>24</td>
-                            </tr>
-                            <tr>
-                                <td>16-20</td>
-                                <td>26</td>
-                            </tr>
-                            <tr>
-                                <td>21-25</td>
-                                <td>28</td>
-                            </tr>
-                            <tr>
-                                <td>26-30</td>
-                                <td>30</td>
-                            </tr>
-                        </tbody>
-                          
-                    </table>
-                    </div>
-                    <div class="col-6">
-                    <div class="form-group">
-                            <label for="vacation">Fecha de ingreso</label>
-                            <input type="text" class="form-control" wire:model.live="hireDate" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="vacation">Años de trabajo:</label>
-                            <input type="text" class="form-control" wire:model.live="yearsOfWork" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="vacation">Días de vacaciones:</label>
-                            <input type="text" class="form-control" wire:model.live="days" readonly>
-                        </div>
-                    </div>
-                    </div>
+                        <div class="col-12">
+                            <table
+                                class="table table-striped table-bordered table-hover dataTable dtr-inline table-responsiv">
+                                <thead>
+                                    <th>Fecha de salida</th>
+                                    <th>Fecha de regreso</th>
+                                    <th>Dias tomados</th>
+                                    <th>Comentarios</th>
+                                </thead>
+                                <tbody>
+                                    @foreach ($vacations as $vacation)
+                                        <tr>
+                                            <td class="text-center">{{ $vacation->start_date }}</td>
+                                            <td class="text-center">{{ $vacation->end_date }}</td>
+                                            <td class="text-center">{{ $vacation->remaining_days }}</td>
+                                            <td class="text-center">{{ $vacation->comments }}</td>
+                                        </tr>
+                                    @endforeach
 
-                   
-                </div>
-                <div class="card-footer d-flex justify-content-end align-items-end ">
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 </form>
-                </div>
             </div>
         </div>
-      
+    </div>
+
 
 
 

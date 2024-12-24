@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('rfc');
             $table->string('curp');
             $table->string('imms_number');
+            $table->string('imms_date')->nullable();
             $table->string('seniority_days');
             $table->string('img_url')->nullable();
             $table->string('employee_type');

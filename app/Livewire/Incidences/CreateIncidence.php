@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Incidences;
 
-use App\Models\abilitations;
+use App\Models\Abilitations;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use App\Models\Employees;
@@ -35,7 +35,7 @@ class CreateIncidence extends Component
 
     public function mount()
     {
-        $this->abilitations = abilitations::all();
+        $this->abilitations = Abilitations::all();
         $this->weeksOfYear();
         $this->daysOfWeek($this->currentWeek);
     }
@@ -55,7 +55,7 @@ class CreateIncidence extends Component
     {
         $currentDate = Carbon::now();
 
-        $this->currentWeek = $currentDate->weekOfYear;
+        $this->currentWeek = $currentDate->weekOfYear-1;
         $lastWednesdayPrevYear = Carbon::now()->subYear()->endOfYear()->startOfWeek(4);
 
         for ($week = 0; $week <= $this->currentWeek; $week++) {
@@ -102,7 +102,7 @@ class CreateIncidence extends Component
         //     ->pluck('employee_id')
         //     ->toArray();
         // $users = Employees::whereNotIn('id', $excludedEmployeeIds)->get();
-        $users =Employees::all();
+        $users =Employees::where('payment_type', 'SEMANAL')->get();
     
         return $users;
     }

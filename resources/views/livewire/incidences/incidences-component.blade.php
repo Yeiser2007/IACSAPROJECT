@@ -4,7 +4,7 @@
   <div class="card-header bg-white">
     <div class="row col-12 ">
       <div class="col-6">
-        <h5>Tabla de registros semana: <b> {{ $weekSelected }}</b></h5>
+        <h5>Tabla de registros semana: <b> {{ $weekSelected +1}}</b></h5>
       </div>
       <div class="col-6">
         <button type="button" class="btn btn-warning float-end" data-bs-toggle="modal"

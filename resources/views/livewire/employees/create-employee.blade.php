@@ -133,18 +133,25 @@
 
                                         </div>
                                         <div class="row col-12">
-                                            <div class="col-5">
+                                            <div class="col-4">
                                                 <label for="category" class="form-label">Categoría:</label>
                                                 <input type="text" class="form-control" id="categoria"
                                                     wire:model="category" required>
                                                 @error('category') <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
-                                            <div class="col-7">
+                                            <div class="col-4">
                                                 <label for="imms_number" class="form-label">Número de IMSS:</label>
                                                 <input type="text" class="form-control" id="imms_number"
                                                     wire:model="imms_number" required>
                                                 @error('imms_number') <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                            <div class="col-4">
+                                                <label for="imms_date" class="form-label">Número de IMSS:</label>
+                                                <input type="text" class="form-control" id="imms_date"
+                                                    wire:model="imms_date" required>
+                                                @error('imms_date') <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
                                         </div>

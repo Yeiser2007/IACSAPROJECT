@@ -40,6 +40,7 @@ class EmployeesController extends Controller
         $employee->rfc = $request->rfc;
         $employee->curp = $request->curp;
         $employee->imms_number = $request->imms_number;
+        $employee->imms_date = $request->imms_date;
         $employee->seniority_days = $request->seniority_days;
         $employee->employee_type = $request->employee_type;
         $latest = $employee->id;

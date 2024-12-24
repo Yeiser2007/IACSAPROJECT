@@ -36,6 +36,7 @@ Route::middleware([
     //incidencias
     Route::resource('/incidencias', IncidencesController::class);
     Route::get('/incidencias/export/{week}', [IncidencesController::class, 'exportIncidences'])->name('incidencias.export');
+    Route::post('/abilitations/add', [IncidencesController::class, 'addAbilitation'])->name('abilitaciones.store');
     
     //incidencias semanales
 

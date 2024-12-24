@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\IncidencesExport;
+use App\Models\Abilitations;
 use App\Models\Incidences;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -85,6 +86,15 @@ class IncidencesController extends Controller
         session()->flash('success', 'La incidencia se registro correctamente.');
     }
        
+        return redirect()->route('incidencias.index');
+    }
+    public function addAbilitation(Request $request){
+        $abilitation = new Abilitations();
+        $abilitation->name = $request->name;
+        $abilitation->salary = $request->salary;
+        $abilitation->save();
+        
+        session()->flash('success', 'La abilitacion se registro correctamente.');
         return redirect()->route('incidencias.index');
     }
    

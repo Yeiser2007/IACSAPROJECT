@@ -48,6 +48,7 @@ class CreateEmployee extends Component
     public $img;
     public $currentStep = 1;
     public $payment_type;
+    public $imms_date;
 
     public function render()
     {
@@ -158,6 +159,7 @@ class CreateEmployee extends Component
         $employee->rfc = $this->rfc;
         $employee->curp = $this->curp;
         $employee->imms_number = $this->imms_number;
+        $employee->imms_date = $this->imms_date;
         //dividir los seniority_days entre 365 traer con 2 decimales
         $this->seniority_days = number_format($this->seniority_days / 365, 2, '.', '');
         $employee->seniority_days = $this->seniority_days;

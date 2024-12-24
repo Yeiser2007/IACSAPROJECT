@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\abilitations;
+use App\Models\Abilitations;
 use App\Models\Employees;
 use App\Models\Incidences;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -77,7 +77,7 @@ class IncidencesExport implements FromCollection, WithHeadings, ShouldAutoSize, 
                             return "";
                         }else{
                             $employeeSalary = Employees::find($incidence->employee_id);
-                            $abilitation_id = abilitations::find($incidence->abilitation_id);
+                            $abilitation_id = Abilitations::find($incidence->abilitation_id);
                             $abilitation = $abilitation_id->salary - $employeeSalary->daily_salary;
                             return $abilitation;
                         }
