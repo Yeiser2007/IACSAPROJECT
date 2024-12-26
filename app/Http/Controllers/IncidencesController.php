@@ -88,16 +88,6 @@ class IncidencesController extends Controller
        
         return redirect()->route('incidencias.index');
     }
-    public function addAbilitation(Request $request){
-        $abilitation = new Abilitations();
-        $abilitation->name = $request->name;
-        $abilitation->salary = $request->salary;
-        $abilitation->save();
-        
-        session()->flash('success', 'La abilitacion se registro correctamente.');
-        return redirect()->route('incidencias.index');
-    }
-   
     public function daysOfWeek($week)
     {
         Carbon::setLocale('es');

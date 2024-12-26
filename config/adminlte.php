@@ -353,6 +353,11 @@ return [
                     'text' => 'Vacaciones',
                     'url' => '/vacaciones',
                     'can' => 'employees.index',
+                ],
+                [
+                    'text' => 'Habilitaciones',
+                    'url' => '/habilitaciones',
+                    'can' => 'employees.index',
                 ]
             ],
         ],

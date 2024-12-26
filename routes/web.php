@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Abilitation;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\FortnightlyIncidents;
 use App\Http\Controllers\IncidencesController;
@@ -36,8 +37,12 @@ Route::middleware([
     //incidencias
     Route::resource('/incidencias', IncidencesController::class);
     Route::get('/incidencias/export/{week}', [IncidencesController::class, 'exportIncidences'])->name('incidencias.export');
-    Route::post('/abilitations/add', [IncidencesController::class, 'addAbilitation'])->name('abilitaciones.store');
+
+//habilitaciones
+    Route::resource('/habilitaciones', Abilitation::class)->except('create','show')->names('habilitaciones');
+    Route::post('/abilitations/add', [Abilitation::class, 'addAbilitation'])->name('abilitaciones.store');
     
+
     //incidencias semanales
 
     Route::resource('/incidencias-semanales', WeeklyIncidents::class);

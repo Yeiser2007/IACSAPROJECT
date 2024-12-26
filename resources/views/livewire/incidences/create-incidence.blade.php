@@ -136,7 +136,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Agregar abilitacion</h5>
+        <h5 class="modal-title" id="exampleModalLabel">AGREGAR HABILITACIÓN</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -149,7 +149,7 @@
             <input type="text" class="form-control" id="name" name="name" required>
           </div>
           <div class="form-group">
-            <label for="description">Saliario</label>
+            <label for="description">Salario</label>
             <input class="form-control" id="description" name="salary" required></input>
           </div>
           <button type="submit" class="btn btn-primary">Guardar</button>
