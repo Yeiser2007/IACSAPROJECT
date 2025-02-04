@@ -139,37 +139,74 @@ class IncidencesComponent extends Component
     }
     public function generateIncidences()
     {
-        $selectedDays = collect($this->daysSelected)->filter(function ($isSelected) {
-            return $isSelected; 
-        })->keys(); 
+        $comments = '';
+        $selectedDays = collect($this->daysSelected)->filter(fn($isSelected) => $isSelected)->keys();
+        $daysOfWeekFiltered = array_filter($this->daysOfWeek, fn($day) => true);
     
-        $daysOfWeekFiltered = array_filter($this->daysOfWeek, function ($day) use ($selectedDays) {
-            return true; // Mantener todos los días para procesarlos.
-        });
+        $employees = Employees::where('payment_type', 'SEMANAL')->get();
     
-        $employees = Employees::where('status', 'Alta')->get();
-        
         foreach ($employees as $employee) {
+            $firstDayFecha = Carbon::parse($daysOfWeekFiltered[0]['fecha']); 
+            $lastDayFecha = Carbon::parse(end($daysOfWeekFiltered)['fecha']);
+            $hiringDate = Carbon::parse($employee->hire_date); 
+            if ($employee->termination_date && $firstDayFecha >= Carbon::parse($employee->termination_date)) {
+                continue;
+            }
+    
             foreach ($daysOfWeekFiltered as $day) {
                 $fecha = Carbon::parse($day['fecha']);
-                $exists = Incidences::where('employee_id', $employee->id)
+                $isSunday = $fecha->isSunday();
+                $isHoliday = $selectedDays->contains($day['nombre']);
+             
+    
+                if ($isSunday || $isHoliday) {
+                    $recordedSchedule = $isHoliday ? 'Festivo' : 'Descanso';
+                    $entryTime = null;
+                    $exitTime = null;
+                } else {
+                    $recordedSchedule = $fecha->isSaturday() ? '13:00' : '17:00';
+                    $entryTime = '08:00';
+                    $exitTime = $recordedSchedule;
+                }
+                if ($hiringDate->between($firstDayFecha, $lastDayFecha) && $fecha < $hiringDate) {
+                    $status = 'Falta';
+                    $comments = 'Falta';
+                } else {
+                    $status = '';
+                    $comments = '';
+                }
+                if (isset($employee->termination_date) && $fecha >= Carbon::parse($employee->termination_date)) {
+                    $status = 'Falta';
+                    $comments = 'Falta';
+                }
+                $statusEmployee = $status;
+    
+                if ($statusEmployee == 'Falta') {
+                    $recordedSchedule = 'Falta';
+                    $entryTime = null;
+                    $exitTime = null;
+                    $comments = 'Falta';
+                }
+
+                $incidence = Incidences::where('employee_id', $employee->id)
                     ->where('record_date', $day['fecha'])
-                    ->exists();
+                    ->first();
     
-                if (!$exists) {
-                    $isSunday = $fecha->isSunday();
-                    $isHoliday = $selectedDays->contains($day['nombre']);
-    
-                    if ($isSunday || $isHoliday) {
-                        $recordedSchedule = $isHoliday ? 'Festivo' : 'Descanso';
-                        $entryTime = null;
-                        $exitTime = null;
-                    } else {
-                        $recordedSchedule = $fecha->isSaturday() ? '13:00' : '17:00';
-                        $entryTime = '08:00';
-                        $exitTime = $recordedSchedule;
-                    }
-    
+                if ($incidence) {
+                    $incidence->update([
+                        'recorded_schedule' => $incidence->recorded_schedule ?: $recordedSchedule,
+                        'entry_time' => $incidence->entry_time ?: $entryTime,
+                        'exit_time' => $incidence->exit_time ?: $exitTime,
+                        'overtime_hours' => $incidence->overtime_hours ?? 0,
+                        'sunday_premium' => $incidence->sunday_premium ?? 0,
+                        'user_id' => $incidence->user_id ?: auth()->user()->id,
+                        'holiday' => $incidence->holiday ?: ($isHoliday ? 'Si' : ''),
+                        'abilitation_id' => $incidence->abilitation_id ?? null,
+                        'reason' => $incidence->reason ?: '',
+                        'comments' => $incidence->comments ?: $comments,
+                    ]);
+                } else {
+                    // 🛠 **Si no existe, lo creamos**
                     Incidences::create([
                         'employee_id' => $employee->id,
                         'record_date' => $day['fecha'],
@@ -187,8 +224,31 @@ class IncidencesComponent extends Component
                 }
             }
         }
-        $this->dispatch('reloadPage');  
+    
+        session()->flash('success', 'Incidencias generadas correctamente.');
+        return redirect()->route('incidencias.index');
     }
     
-
+    public function showClean($id, $name, $firstName, $lastName, $day) {
+        $this->idClean = $id;
+        $this->name = $name;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->day = $day;
+    }
+    public function cleanIncidences($id) {
+        $incidence = Incidences::find($id);
+        $incidence->overtime_hours = 0;
+        $incidence->sunday_premium = 0;
+        $incidence->abilitation_id = null;
+        if($incidence->recorded_schedule == "Falta") {
+            $incidence->recorded_schedule = $incidence->exit_time;
+        }
+        $incidence->holiday = '';
+        $incidence->reason = '';
+        $incidence->comments = '';
+        $incidence->save();
+        session()->flash('success', 'Incidencia eliminada correctamente.');
+        return redirect()->route('incidencias.index');
+    }
 }

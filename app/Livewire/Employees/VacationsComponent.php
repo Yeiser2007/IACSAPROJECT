@@ -11,10 +11,9 @@ use Carbon\Carbon;
 class VacationsComponent extends Component
 {
     use WithPagination;
-    public $search;
-    public $endDate, $startDate, $comments, $employeeId,$messageDays,$daysOfVacation;
-    public $sort = 'id';
-    public $direction = 'desc';
+    public $search,$endDate, $startDate, $comments, $employeeId,$messageDays,$daysOfVacation,$daysCalculated,$totalDays=0;
+    public $sort = 'employee_id';
+    public $direction = 'asc';
     public $remainingDays = 0;
     public $days = 0;
 
@@ -90,12 +89,27 @@ class VacationsComponent extends Component
     }
     public function calculateDaysOfVacation(){
         $employee = Employees::all();
+        $seniority_days = 0;
         foreach ($employee as $e) {
-            $this->daysOfVacation($e->seniority_days);
-            $vacation = Vacations::where('employee_id', $e->id)->first(); 
-            $vacation->days = $this->days;
-            $vacation->remaining_days = 0;
+            $current_date = Carbon::now()->startOfDay();
+            $start_date = Carbon::parse($e->hire_date)->startOfDay(); 
+            $seniority_days = $start_date->diffInDays($current_date)-1;
+            $seniorityDays = number_format($seniority_days/365,2);
+            $this->daysOfVacation($seniorityDays);
+            $vacation = Vacations::where('employee_id', $e->id)->orderBy('id', 'desc')->first();
+
+            if (!$vacation) {
+                $vacation = new Vacations();
+                $vacation->employee_id = $e->id;
+                $vacation->remaining_days = 0;
+            }
+            
+            $vacation->seniority_days = $seniorityDays ?? 0;
+            $vacation->days_earned = $this->totalDays;
+            $vacation->days = $this->daysCalculated;
             $vacation->save();
+            
+            
     }
     session()->flash('success', 'La solicitud de vacaciones se registro correctamente.');
     return redirect()->route('empleados.vacaciones');

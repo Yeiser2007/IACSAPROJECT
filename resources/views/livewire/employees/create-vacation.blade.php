@@ -84,6 +84,13 @@
                                     <th>Fecha de regreso</th>
                                     <th>Dias tomados</th>
                                     <th>Comentarios</th>
+                                    <th>Creado por</th>
+                                    @can('vacaciones.edit')
+                                    <th>Acciones</th>
+
+                                    @endcan
+                                    
+                                    
                                 </thead>
                                 <tbody>
                                     @foreach ($vacations as $vacation)
@@ -92,6 +99,25 @@
                                             <td class="text-center">{{ $vacation->end_date }}</td>
                                             <td class="text-center">{{ $vacation->remaining_days }}</td>
                                             <td class="text-center">{{ $vacation->comments }}</td>
+                                            @can('vacaciones.edit')
+                                            <td>{{ $vacation->user->name ?? 'Sin usuario' }}</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-info" data-bs-toggle="modal"
+                                                    data-bs-target="#editModal" wire:click="edit('{{ $vacation->id }}')">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                @can('vacaciones.destroy')
+                                                <button class="btn btn-danger" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteModal" wire:click.prevent="showDelete('{{ $vacation->id }}')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                                @endcan
+                                               
+                                            </td>
+                                     
+                                            @endcan
+                     
+                                            
                                         </tr>
                                     @endforeach
 

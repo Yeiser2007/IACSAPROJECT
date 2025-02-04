@@ -7,15 +7,23 @@
         <h5>Tabla de registros semana: <b> {{ $weekSelected +1}}</b></h5>
       </div>
       <div class="col-6">
-        <button type="button" class="btn btn-warning float-end" data-bs-toggle="modal"
-          data-bs-target="#generateIncidencesModal">
-          Generar registros
-        </button>
+      @can('incidencias_diarias.create')
+        @if (isset($weekSelected, $yearSelected))
+          
+            <button type="button" class="btn btn-warning float-end" data-bs-toggle="modal"
+            data-bs-target="#generateIncidencesModal">
+            Generar registros
+          </button>
+       
+        @endif
+      @endcan
       </div>
     </div>
   </div>
 
   <div class="card-body bg-white">
+    
+
     <div class="row col-12 mb-2">
       <div class="col-4 d-flex justify-content-start ">
         <a href="{{ route('incidencias.export', $weekSelected) }}" class="btn btn-success">Exportar a excel</a>
@@ -30,7 +38,7 @@
         </div>
       </div>
     </div>
-   
+    @if (isset($incidencesByEmployee) && !empty($incidencesByEmployee) && count($incidencesByEmployee) > 0)
     <div class="row col-12" style="overflow-x: auto; white-space: nowrap;">
       <table class="table table-striped table-bordered table-hover dataTable dtr-inline table-responsiv">
         <thead>
